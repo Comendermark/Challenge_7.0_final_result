@@ -37,7 +37,16 @@ var express = require("express"),
     mkdirp = require("mkdirp"),
     multiparty = require('multiparty'),
     app = express(),
+    mysql = require('mysql'),
 
+    // create connection to database
+const db = mysql.createConnection ({
+    host : '10.11.90.15',
+    user: 'study',
+    password:'Study1111%',
+    schema: 'my_node',
+    table:'files'
+});
     // paths/constants
     fileInputName = process.env.FILE_INPUT_NAME || "qqfile",
     publicDir = process.env.PUBLIC_DIR,
