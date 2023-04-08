@@ -1,0 +1,423 @@
+<html>
+<head>
+<link rel="stylesheet" href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/datatables.min.js"></script>
+<!--    <link rel="stylesheet" href="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/datatables.min.css"/>-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"/>
+
+</head>
+<style>
+td {
+    text-align: center;
+}
+
+th {
+    text-align: center;
+}
+</style>
+
+<meta charset="UTF-8">
+<title>Title</title>
+
+<!--<table id="table_id" class="display">-->
+
+<!--    <div class="col-md-2 pl-1">-->
+<!--        <div class="form-group" id="filter_col0" data-column="0">-->
+<!--            <label>date</label>-->
+<!--            <select name="datebID" class="form-control column_filter" id="col1_filter">-->
+<!--                <option>March 1st</option>-->
+<!--                <option>March 5th</option>-->
+<!--                <option>March 10th</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash;Job&ndash;&gt;-->
+<!--    <div class="col-md-2 pl-1">-->
+<!--        <div class="form-group" id="filter_col1" data-column="1">-->
+<!--            <label>grade</label>-->
+<!--            <select name="JobID" class="form-control column_filter" id="col2_filter">-->
+<!--                <option>10</option>-->
+<!--                <option>11</option>-->
+<!--                <option>12</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash;Age&ndash;&gt;-->
+<!--    <div class="col-md-2 pl-1">-->
+<!--        <div class="form-group" id="filter_col2" data-column="2">-->
+<!--            <label>nationality</label>-->
+<!--            <select name="nabID" class="form-control column_filter" id="col3_filter">-->
+<!--                <option>Vietnamese</option>-->
+<!--                <option>Chinese</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="text-center">-->
+<!--        <a class="btn btn-success btn-lg " href="#"><i class="fa fa-filter "></i> Filter</a>-->
+<!--        <Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>-->
+<!--    </div>-->
+<!--    <div class="card row">-->
+<!--        <div class="col-lg-12">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>id</th>-->
+<!--        <th>name</th>-->
+<!--        <th>email</th>-->
+<!--        <th>date added</th>-->
+<!--        <th>grade</th>-->
+<!--        <th>nationality</th>-->
+
+<!--    </tr>-->
+<!--    <tr>-->
+<!--
+
+    </thead>-->
+
+    <tbody>
+
+
+
+    </tbody>
+
+<!--    <tfoot>-->
+<!--    <th>id</th>-->
+<!--    <th>name</th>-->
+<!--    <th>email</th>-->
+<!--    <th>date added</th>-->
+<!--    <th>grade</th>-->
+<!--    <th>nationality</th>-->
+<!--    </tfoot>-->
+
+    </tbody>
+    <tr>
+
+    </tr>
+
+    </thead>
+    <tbody>
+
+
+
+    </tbody>
+    <tfoot>
+
+    </tbody>
+
+</table>
+
+<table id="oTable" class="display" style="margin-bottom: 50px">
+    <div id="search" style = "float:left " >Date</div>
+    <div id="search1" style=" float: left   ">Grade</div>
+    <div id="search2" style="margin-left: 200px ; ">Nationality</div>
+<!--<div id="search" />-->
+
+<!--    <div id="search1" />-->
+
+<!--    <div id="search2" style="margin-left:200px" />-->
+
+<!--    <div class="large-6 columns">-->
+<!--        <label for="start">Start Date</label>-->
+<!--        <input id="start" type="date" /><br />-->
+<!--    </div>-->
+<!--    <div class="large-6 columns">-->
+<!--        <label for="end">End Date</label>-->
+<!--        <input id="end" type="date" /><br />-->
+<!--    </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--        <div class="large-12 columns">-->
+<!--            <button class="button radius" id="filter">Filter</button>-->
+<!--            <button id="clearFilter" class="button radius secondary">Clear Filter</button>-->
+<!--        </div>-->
+
+<!--    <select class="filter" data-field="Status">-->
+<!--        <option value="">None</option>-->
+<!--        <option value="OK">OK</option>-->
+<!--        <option value="NO">NO</option>-->
+<!--    </select>-->
+<!--    <select class="filter" data-field="Cough">-->
+<!--        <option value="">None</option>-->
+<!--        <option value="No">No</option>-->
+<!--        <option value="Yes">Yes</option>-->
+<!--    </select>-->
+<!--    <select class="filter" data-field="Fever">-->
+<!--        <option value="">None</option>-->
+<!--        <option value="No">No</option>-->
+<!--        <option value="Yes">Yes</option>-->
+<!--    </select>-->
+<div>
+</div>
+
+    </div>
+    <button id="refresh">refresh</button>
+    <thead>
+    <a class="icon-upload icon-white" href="http://localhost:8000/sendfile">
+        <button type="button" id="return-button" class="none" >
+            <i class="icon-upload icon-white"></i> send file
+    <tr >
+        <th>id</th>
+        <th>name</th>
+        <th>email</th>
+        <th>Date </th>
+        <th>grade</th>
+        <th>nationality</th>
+
+    </tr>
+
+
+
+    </thead>
+
+
+    <tfoot>
+    <th>id</th>
+    <th>name</th>
+    <th>email</th>
+    <th>Date</th>
+    <th>grade</th>
+    <th>nationality</th>
+    </tfoot>
+
+    </tbody>
+
+    <!--Name-->
+
+<!--        <input type="submit" value="Submit" id= "submit" style=" margin-left: 295px; margin-top: 20px">-->
+<!--    </form>-->
+<!--    <div id="search"></div>-->
+<!--    <div id="search1"></div>-->
+<!--    <div id="search2"></div>-->
+
+
+</table>
+<style>
+    input{
+        border: solid 1px #E5E5E5;
+        outline: 0;
+        font: normal 13px/100% Verdana, Tahoma, sans-serif;
+        width: 120px;
+        padding: 3px;
+        background: #FFFFFF;
+
+    }
+
+    input:hover, input:focus {
+        border-color: #C9C9C9;
+    }
+
+    .submit input {
+        width: auto;
+        border: solid 1px #617798;
+        background: #617798;
+    }
+    div.dt-buttons {
+        clear: both;
+    }
+
+    .filter-table {
+        border-collapse: collapse;
+    }
+
+    .filter-table {
+        border: thin solid grey;
+    }
+
+    .filter-table thead {
+        border-bottom: thin solid grey;
+    }
+
+    .filter-table th, .filter-table td {
+        padding: 0.25em 0.5em;
+    }
+
+    .filter-table th {
+        background: #CCC;
+    }
+
+    .filter-table tbody tr:nth-child(even) {
+        background: #EEE;
+    }
+
+    .hidden-row {
+        display: none;
+    }
+
+</style>
+<script>
+
+
+    // var data1;
+
+
+
+
+    // for(var i=0; i<data.length; i++);
+
+
+
+    // Converting JS object to an array
+
+
+
+    <!--console.log (data);-->
+
+// select rows
+    $(document).ready( function () {
+        var table = $('#table_id').DataTable();
+            $('#oTable').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            })
+
+
+
+
+
+    } );
+
+//select file
+console.log ("GGG: ");
+    $(document).ready( function () {
+
+        $.ajax ({
+            url: "http://localhost:3008/abc",
+            method: "GET",
+
+            success: function (data) {
+
+                 $('#oTable').DataTable({
+
+
+                    data: data,
+                    dom: 'Bfrtip',
+
+
+                    buttons: [
+                        {
+                            text: "Filter",
+                            action: function (e, dt, node, config) {
+                                dt.column(4).value("11").draw();
+                                dt.column(5).search("Vietnamese").draw();
+                                dt.column(3).search("2021-09-02").draw();
+                            }
+                        }
+                    ],
+                     initComplete: function () {
+                         this.api().columns( [3] ).every( function () {
+                             var column = this;
+                             var select = $('<select><option value=""></option></select>')
+                                     .appendTo( $('#search') )
+                                     .on( 'change', function () {
+                                         var val = $.fn.dataTable.util.escapeRegex(
+                                                 $(this).val()
+                                                 );
+
+                                         column
+                                                 .search( val ? '^'+val+'$' : '', true, false )
+                                                 .draw();
+                                     } );
+
+                             column.data().unique().sort().each( function ( d, j ) {
+                                 select.append( '<option value="'+d+'">'+d+'</option>' )
+                             } );
+                         } );
+                         this.api().columns( [4] ).every( function () {
+                             var column = this;
+                             var select = $('<select><option value=""></option></select>')
+                                     .appendTo( $('#search1') )
+                                     .on( 'change', function () {
+                                         var val = $.fn.dataTable.util.escapeRegex(
+                                                 $(this).val()
+                                                 );
+
+                                         column
+                                                 .search( val ? '^'+val+'$' : '', true, false )
+                                                 .draw();
+                                     } );
+
+                             column.data().unique().sort().each( function ( d, j ) {
+                                 select.append( '<option value="'+d+'">'+d+'</option>' )
+                             } );
+                         } );
+
+                         this.api().columns( [5] ).every( function () {
+                             var column = this;
+                             var select = $('<select><option value=""></option></select>')
+                                     .appendTo( $('#search2') )
+                                     .on( 'change', function () {
+                                         var val = $.fn.dataTable.util.escapeRegex(
+                                                 $(this).val()
+                                                 );
+
+                                         column
+                                                 .search( val ? '^'+val+'$' : '', true, false )
+                                                 .draw();
+                                     } );
+
+                             column.data().unique().sort().each( function ( d, j ) {
+                                 select.append( '<option value="'+d+'">'+d+'</option>' )
+                             } );
+                         } );
+                     },
+
+                    columns: [
+                        {"data": 'id'},
+                        {"data": 'name'},
+                        {"data": 'email'},
+                        {"data": 'date'},
+                        {"data": 'Grade'},
+                        {"data": 'nationality'},
+                    ],
+
+                });
+                //         $.fn.dataTable.ext.buttons.refresh = {
+                //             buttons: [
+                //                 {
+                //                     text: 'refresh',
+                //                     action: function ( e, dt, node, config ) {
+                //                         dt.clear().draw();
+                //                         dt.ajax.reload();
+                //                     }
+                //                 },
+                //             ],
+                //         }
+                // table.buttons( 1, null ).container().appendTo(
+                //         table.table().container()
+                //         );
+
+
+                $('#refresh').click(function () {
+                    $('#oTable').DataTable().ajax.reload();
+
+                })
+
+            },
+
+
+                error: function (error) {
+                    alert("AJAX ERROR:" + error);
+
+
+            },
+
+        })
+
+
+    });
+
+
+
+
+
+
+
+    console.log("EEE: ")
+
+
+</script>
+
+</html>
+

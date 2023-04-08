@@ -1,17 +1,4 @@
-// var createError = require('http-errors');
-// var express = require('express');
-// var path = require('path');
-// var cookieParser = require('cookie-parser');
-// var logger = require('morgan');
-//
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-//
-// var app = express();
 
-// view engine setup
-// app.set('views', path.join(__dirname, './', 'views'));
-// app.engine('html', require('html').renderFile);
 
 /**
  * NodeJs Server-Side Example for Fine Uploader (traditional endpoints).
@@ -31,50 +18,76 @@
  */
 
 // Dependencies
-var express = require("express"),
-    fs = require("fs"),
-    rimraf = require("rimraf"),
-    mkdirp = require("mkdirp"),
-    multiparty = require('multiparty'),
-    app = express(),
-    mysql = require('mysql'),
 
-    // create connection to database
-const db = mysql.createConnection ({
+var express = require("express");
+var fs = require("fs");
+var rimraf = require("rimraf");
+var mkdirp = require("mkdirp");
+var multiparty = require('multiparty');
+var app = express();
+var mysql = require('mysql');
+const path = require("path");
+var Data;
+// create connection to database
+var con = mysql.createConnection ({
     host : '10.11.90.15',
     user: 'study',
     password:'Study1111%',
     schema: 'my_node',
     table:'files'
 });
-    // paths/constants
-    fileInputName = process.env.FILE_INPUT_NAME || "qqfile",
+
+// con.connect(function(err) {
+//     if (err) throw err;
+//     console.log("Connected to database");
+// });
+// paths/constants
+fileInputName = process.env.FILE_INPUT_NAME || "qqfile",
     publicDir = process.env.PUBLIC_DIR,
     nodeModulesDir = process.env.NODE_MODULES_DIR,
-    uploadedFilesPath = process.env.UPLOADED_FILES_DIR,
+    uploadedFilesPath = process.env.UPLOADED_FILES_DIR ||'/Users/imac09/IdeaProjects/Challenge_7.0/uploadFiles',
     chunkDirName = "chunks",
     port = process.env.SERVER_PORT || 8000,
     maxFileSize = process.env.MAX_FILE_SIZE || 0; // in bytes, 0 for unlimited
 
-app.use("/", (req, res) => {
-    res.sendFile(__dirname +"/concept.html");
 
-});
 //
 // var port = 3009;
 // app.listen(port)
 console.log("app.js is using port "+ port);
 
 
-app.listen(port);
+app.listen(port, function() {
+    console.log('http://localhost:' + port +"/sendfile" );
+});
+
+
+
 
 // routes
 // app.use(express.static(publicDir));
 // app.use("/node_modules", express.static(nodeModulesDir));
-app.post("/uploads", onUpload);
+app.post('/Users/imac09/IdeaProjects/Challenge_7.0/uploadFiles', onUpload);
 app.delete("/uploads/:uuid", onDeleteFile);
 
+// app.get('/', function(req, res) {
+//     con.query('SELECT * FROM my_node.files ORDER BY id ', function (err, rows) {
+//         // console.log(rows);
+//         // console.log("AAA: ");
+//         // console.log (__dirname + '/views/datatable.ejs')
+//         Data = rows
+//         console.log("BBB: ")
+//         console.log(Data)
+//
+// });
 
+// res.render(__dirname + 'concept.html', {
+//     data: Data
+
+// })
+app.use("/sendfile", (req, res) => {
+    res.sendFile(__dirname + "/concept.html");
+});
 function onUpload(req, res) {
     var form = new multiparty.Form();
 
@@ -92,17 +105,38 @@ function onUpload(req, res) {
         }
     });
 }
+// =====================check the directory=====================
+fs.access("/Users/imac09/IdeaProjects/Challenge_7.0/uploadFiles", function(error) {
+    if (error) {
+        console.log("Directory does not exist.")
+    } else {
+        console.log("Directory exists.")
+    }
+})
 
+// =====================Handle upload file=====================
 function onSimpleUpload(fields, file, res) {
+
+    //
+    //
+    // file.name = fields.qqfilename;
+    //
+    // if (isValid(file.size)) {
+    //     moveUploadedFile(file, uuid, function() { // pass the correct directory path
+    //             responseData.success = true;
+    //             res.send(responseData);
     var uuid = fields.qquuid,
         responseData = {
             success: false
         };
 
     file.name = fields.qqfilename;
+    var uploadDir = '/Users/imac09/IdeaProjects/Challenge_7.0/uploadFiles'; // path to upload directory
+    console.log(file.path);
 
     if (isValid(file.size)) {
-        moveUploadedFile(file, uuid, function() {
+        var uploadDir = '/Users/imac09/IdeaProjects/Challenge_7.0/uploadFiles'; // path to upload directory
+        moveFile(uploadDir, file.path, function() {
                 responseData.success = true;
                 res.send(responseData);
             },
@@ -110,12 +144,121 @@ function onSimpleUpload(fields, file, res) {
                 responseData.error = "Problem copying the file!";
                 res.send(responseData);
             });
+
     }
     else {
         failWithTooBigFile(responseData, res);
     }
+};
+
+function moveFile(destinationDir, sourceFile, success, failure) {
+    var path = require('path');
+    var destinationFile = path.join(destinationDir, path.basename(sourceFile));
+
+    mkdirp(destinationDir, function(error) {
+        var sourceStream, destStream;
+
+        if (error) {
+            console.error("Problem creating directory " + destinationDir + ": " + error);
+            failure();
+        }
+        else {
+            sourceStream = fs.createReadStream(sourceFile);
+            destStream = fs.createWriteStream(destinationFile);
+
+            sourceStream
+                .on("error", function(error) {
+                    console.error("Problem copying file: " + error.stack);
+                    destStream.end();
+                    failure();
+                })
+                .on("end", function(){
+                    destStream.end();
+                    success();
+                })
+                .pipe(destStream);
+        }
+    });
+
+
 }
 
+
+
+
+
+
+
+
+function isValid(size) {
+    return maxFileSize === 0 || size < maxFileSize;
+}
+
+// =====================Handle move file=====================
+
+
+
+app.post('/move-file', function(req, res) {
+    var sourcePath = '/Users/imac09/IdeaProjects/Challenge_7.0/uploadFiles'; // replace this with the actual path of the file you want to move
+    var destPath = '/Users/imac09/IdeaProjects/Challenge_7.0/DataDir'; // replace this with the actual path of the destination directory
+
+    fs.readdir(sourcePath, function(err, files) {
+        if (err) {
+            console.log('Error reading directory:', err);
+            res.status(500).send('Error reading directory');
+            return;
+        }
+
+        // Loop through the list of files and move each one to the destination directory
+        files.forEach(function(file) {
+            fs.rename(path.join(sourcePath, file), path.join(destPath, file), function(err) {
+                if (err) {
+                    console.log('Error moving file:', err);
+                } else {
+                    console.log('File moved successfully');
+                }
+            });
+        });
+
+        res.redirect("/sendfile")
+    });
+});
+
+//=========show file in upLoadFile=============
+app.get('/list-files', function(req, res) {
+    var dirPath = '/Users/imac09/IdeaProjects/Challenge_7.0/uploadFiles';
+    fs.readdir(dirPath, function(err, files) {
+        if (err) {
+            console.log('Error reading directory:', err);
+            res.status(500).send('Error reading directory');
+            return;
+        }
+        var fileData = [];
+        files.forEach(function(file) {
+            fileData.push({
+                name: file
+            });
+        });
+        res.json(fileData);
+    });
+});
+
+console.log('http://localhost:8000/list-files');
+
+
+
+
+
+
+
+
+
+
+//===========================Dont touch====================================
+function failWithTooBigFile(responseData, res) {
+    responseData.error = "File is too big!";
+    res.send(responseData);
+}
 function onChunkedUpload(fields, file, res) {
     var size = parseInt(fields.qqtotalfilesize),
         uuid = fields.qquuid,
@@ -178,32 +321,32 @@ function isValid(size) {
     return maxFileSize === 0 || size < maxFileSize;
 }
 
-function moveFile(destinationDir, sourceFile, destinationFile, success, failure) {
-    mkdirp(destinationDir, function(error) {
-        var sourceStream, destStream;
-
-        if (error) {
-            console.error("Problem creating directory " + destinationDir + ": " + error);
-            failure();
-        }
-        else {
-            sourceStream = fs.createReadStream(sourceFile);
-            destStream = fs.createWriteStream(destinationFile);
-
-            sourceStream
-                .on("error", function(error) {
-                    console.error("Problem copying file: " + error.stack);
-                    destStream.end();
-                    failure();
-                })
-                .on("end", function(){
-                    destStream.end();
-                    success();
-                })
-                .pipe(destStream);
-        }
-    });
-}
+// function moveFile(destinationDir, sourceFile, destinationFile, success, failure) {
+//     mkdirp(destinationDir, function(error) {
+//         var sourceStream, destStream;
+//
+//         if (error) {
+//             console.error("Problem creating directory " + destinationDir + ": " + error);
+//             failure();
+//         }
+//         else {
+//             sourceStream = fs.createReadStream(sourceFile);
+//             destStream = fs.createWriteStream(destinationFile);
+//
+//             sourceStream
+//                 .on("error", function(error) {
+//                     console.error("Problem copying file: " + error.stack);
+//                     destStream.end();
+//                     failure();
+//                 })
+//                 .on("end", function(){
+//                     destStream.end();
+//                     success();
+//                 })
+//                 .pipe(destStream);
+//         }
+//     });
+// }
 
 function moveUploadedFile(file, uuid, success, failure) {
     var destinationDir = uploadedFilesPath + uuid + "/",
@@ -278,31 +421,3 @@ function getChunkFilename(index, count) {
 
 app.set('view engine', 'html');
 app.use("fine-uploader",express.static('fine-uploader'));
-// app.use(logger('dev'));
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-//
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-//
-// // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
-//
-// // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-//
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
-//
-// module.exports = app;
-
-
